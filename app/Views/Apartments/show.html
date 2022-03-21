@@ -1,0 +1,25 @@
+{%extends "layout.html"%}
+{%block content%}
+
+
+<a href="/apartments/create" class="button">Add</a>
+
+
+{% for apartment in apartments %}
+
+<form method="post" action="/apartments/{{apartment.id}}/delete">
+    <div>
+        <a href="/apartments/{{apartment.id}}/book">{{apartment.name}}</a>
+
+    </div>
+    <tr>
+<!--{{apartment.id}}-->
+{{apartment.address}}
+    <button type="submit" onclick="return confirm('Are you sure?')" class="button">X</button>
+        <a href="/apartments/{{apartment.id}}/edit" class="button">Edit</a>
+</form>
+    </tr>
+
+
+{% endfor %}
+{%endblock%}

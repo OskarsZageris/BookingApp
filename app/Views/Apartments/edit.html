@@ -1,0 +1,36 @@
+{%extends "layout.html"%}
+{%block content%}
+<a href="/apartments">Back</a>
+<form method="post" action="/apartments/{{apartment.id}}">
+<!--    apartments/{{apartment.id}}-->
+    <div>
+
+    <label for="address">Title:</label>
+    <input type="text" id="address" name ="address" value="{{apartment.address}}">
+    </div>
+<div>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name ="name" value="{{apartment.name}}">
+</div>
+
+<!--    <div>-->
+
+<!--        <label for="availableFrom">Available from</label>-->
+<!--        <input type="date" id="availableFrom" name="availableFrom" value="{{apartment.availableFrom}}">-->
+<!--    </div>-->
+<!--    <div>-->
+
+<!--        <label for="availableTill">Available till</label>-->
+<!--        <input type="date" id="availableTill" name="availableTill" value="{{apartment.availableTill}}">-->
+<!--    </div>-->
+    <div>
+
+        <label for="cost">Cost:</label>
+        <input type="text" id="cost" name ="cost" value="{{apartment.cost}}">
+    </div>
+<div>
+
+<button type="submit">Edit</button>
+</div>
+</form>
+{%endblock%}
