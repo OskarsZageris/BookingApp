@@ -18,13 +18,7 @@ class StarsBookingService
 public function execute(StarsBookingRequest $request)
 {
 
-    $connection=  Database::connect();
-    $results = $connection
-        ->createQueryBuilder()
-        ->select('user_id,apartment_id')
-        ->from('ratingsystem')
-        ->executeQuery()
-        ->fetchAllAssociative();
+    $results=$this->apartment->check($request);
     $check=0;
     foreach($results as $result){
         $apartment[]=$result["apartment_id"];
@@ -33,19 +27,11 @@ public function execute(StarsBookingRequest $request)
         }
     }
     if(($check!==0)){
-        Database::connect()
-            ->update('ratingsystem', [
-                'rating' => $request->getRating(),
-            ], ['user_id' => $request->getUserId(),
-                'apartment_id' => $request->getApartmentId()
-            ]);
+       $this->apartment->update($request);
+
     }else{
-        Database::connect()
-            ->insert('ratingsystem', [
-                'user_id' => $request->getUserId(),
-                'rating' => $request->getRating(),
-                'apartment_id' => $request->getApartmentId(),
-            ]);
+        $this->apartment->insert($request);
+
     }
 }
 }
