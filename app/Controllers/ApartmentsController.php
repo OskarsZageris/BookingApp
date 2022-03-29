@@ -4,6 +4,15 @@ namespace App\Controllers;
 
 use App\Database;
 use App\Redirect;
+use App\Service\Apartments\Delete\DeleteApartmentRequest;
+use App\Service\Apartments\Delete\DeleteApartmentService;
+use App\Service\Apartments\Edit\EditApartmentRequest;
+use App\Service\Apartments\Edit\EditApartmentService;
+use App\Service\Apartments\Show\ShowApartmentService;
+use App\Service\Apartments\Store\StoreApartmentRequest;
+use App\Service\Apartments\Store\StoreApartmentService;
+use App\Service\Apartments\Update\UpdateApartmentRequest;
+use App\Service\Apartments\Update\UpdateApartmentService;
 use App\View;
 use App\Models\ApartmentsInfo;
 use App\Models\Rating;
@@ -13,113 +22,52 @@ class ApartmentsController
 
     public function show()
     {
-        $connection = Database::connect();
-        $results = $connection
-            ->createQueryBuilder()
-            ->select('*')
-            ->from('apartments')
-            ->executeQuery()
-            ->fetchAllAssociative();
-//var_dump($results);
-        foreach ($results as $result) {
-            $apartments[] =  new ApartmentsInfo(
-                $result["id"],
-                $result["address"],
-                $result["name"],
-                $result["availableFrom"],
-                $result["availableTill"],
-                $result["cost"]);;
-        }
-
-//return new View("Articles/show.html", [
-//        var_dump($apartments->getName());
-//            "article" => $article,
-//            "articleLikes"=>$articleLikes
-//        ]);
+$service=new ShowApartmentService();
+        $apartments=$service->execute();
         return new View("Apartments/show.html", [
             "apartments" => $apartments
-
         ]);
     }
 
     public function create(): View
     {
         return new View("Apartments/create.html", [
-
         ]);
     }
 
     public function store(): Redirect
     {
-        Database::connect()
-            ->insert('apartments', [
-                'address' => $_POST['address'],
-                'name' => $_POST['name'],
-                'availableFrom' => $_POST['availableFrom'],
-                'availableTill' => $_POST['availableTill'],
-                'cost' => $_POST['cost']
-            ]);
-//redirect /articles
+        $service =new StoreApartmentService();
+        $service->execute(new StoreApartmentRequest($_POST['address'],$_POST['name'],$_POST['cost']));
         return new Redirect("/apartments");
     }
 
     public function delete(array $vars): Redirect
     {
-        Database::connect()
-            ->delete('apartments', [
-                'id' => (int)$vars['id']
-            ]);
+
+        $service = new DeleteApartmentService();
+        $service->execute(new DeleteApartmentRequest($vars["id"]));
         return new Redirect('/apartments');
     }
 
     public function edit(array $vars): View
     {
-//        try {
-        $connection = Database::connect();
-
-        $result = $connection
-            ->createQueryBuilder()
-            ->select('*')
-            ->from('apartments')
-            ->where('id = ?')
-            ->setParameter(0, $vars["id"])
-            ->executeQuery()
-            ->fetchAssociative();
-//            if ($result === false) {
-//                throw new ResourceNotFoundException("Article with id {$vars["id"]} not found");
-////        return new View("404.html");
-//            } else {
-
-        $apartment = new ApartmentsInfo(
-            $result["id"],
-            $result["address"],
-            $result["name"],
-            $result["availableFrom"],
-            $result["availableTill"],
-            $result["cost"]);
-
+        $service = new EditApartmentService();
+        $apartment = $service->execute(new EditApartmentRequest($vars["id"]));
         return new View("Apartments/edit.html", [
             'apartment' => $apartment
         ]);
-//            }
-//        } catch (ResourceNotFoundException $e) {
-//            var_dump($e->getMessage());
-//            return new View("404.html");
-//        }
     }
+
 
     public function update(array $vars): Redirect
     {
-        Database::connect()
-            ->update('apartments', [
-                'address' => $_POST['address'],
-                'name' => $_POST['name'],
-                'availableFrom' => $_POST['availableFrom'],
-                'availableTill' => $_POST['availableTill'],
-                'cost' => $_POST['cost']
-            ], ['id' => (int)$vars['id']
-            ]);
-        var_dump($_POST);
+        $service = new UpdateApartmentService();
+        $service->execute(new UpdateApartmentRequest(
+            "{$_POST['address']}",
+            "{$_POST['name']}",
+            "{$_POST['cost']}",
+            "{$vars['id']}"));
         return new Redirect('/apartments/' . $vars['id'] . "/edit");
     }
 }

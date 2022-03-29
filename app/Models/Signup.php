@@ -17,22 +17,7 @@ class Signup{
         $this->email = $email;
     }
 
-//    private function emptyInput():bool{
-//        if(empty($this->uid)||empty($this->password)||empty($this->passwordRepeat)||empty($this->email)){
-//            return false;
-//        }else{
-//            return true;
-//        }
-//
-//
-//    }
-//    private function passwordMatch():bool{
-//        if($this->password !==$this->passwordRepeat){
-//            return false;
-//        }else{
-//            return true;
-//        }
-//    }
+
     /**
      * @return mixed
      */

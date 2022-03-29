@@ -9,7 +9,7 @@
 </head>
 <body>
 {% if session.userid is defined %}
-<a href="/style">Testing stuff</a>
+
 <a href="/">Home Page</a>
 <form method="post" action="/">
     Hello, <a href="/users/{{ session.userid }}">{{ session.username }}</a>! |

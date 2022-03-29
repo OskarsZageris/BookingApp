@@ -1,30 +1,23 @@
 <?php
 
-namespace App\Models;
+namespace App\Service\Apartments\Show;
 
-class ApartmentsInfo
+class ShowApartmentRequest
 {
+    private $id;
     private $address;
     private $name;
-
-    private $id;
     private $cost;
 
-    public function __construct($address, $name, $cost,?int $id=null)
+    public function __construct($id, $address, $name, $cost)
     {
+
+        $this->id = $id;
         $this->address = $address;
         $this->name = $name;
-        $this->id = $id;
         $this->cost = $cost;
     }
 
-    /**
-     * @param int|null $id
-     */
-    public function setId(?int $id): void
-    {
-        $this->id = $id;
-    }
     /**
      * @return mixed
      */
@@ -36,9 +29,9 @@ class ApartmentsInfo
     /**
      * @return mixed
      */
-    public function getId()
+    public function getName()
     {
-        return $this->id;
+        return $this->name;
     }
 
     /**
@@ -49,12 +42,11 @@ class ApartmentsInfo
         return $this->address;
     }
 
-
     /**
      * @return mixed
      */
-    public function getName()
+    public function getId()
     {
-        return $this->name;
+        return $this->id;
     }
 }
